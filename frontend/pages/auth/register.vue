@@ -187,8 +187,10 @@ const authRegister = async () => {
 
   if (authenticated.value) {
     pending.value = true;
-    router.push('/auth/verify-email');
+    // router.push('/auth/verify-email');
+    // return navigateTo('/auth/verify-email')
     if ((auth.value != null) && (auth.value.role == 'user')) {
+      console.log('push');
       router.push('/user');
     } else {
       router.push('/admin');

@@ -68,6 +68,8 @@ export const useAuthStore = defineStore("auth", {
       const token = useCookie('token', { expires: new Date(Date.now() + 24 * 60 * 60 * 1000) }); // Set expiry for 1 day (in milliseconds)
       token.value = response.data.token; // Set token value
       this.refresh_token = response.data.refreshToken;
+      const refresh_token = useCookie('refresh_token', { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) }); // Set expiry for 7 days (in milliseconds)
+      refresh_token.value = response.data.refreshToken; // Set token value
       this.authenticated = true; // set authenticated  state value to true
       this.setUser(response.data.user)
       Swal.fire(
@@ -119,8 +121,16 @@ export const useAuthStore = defineStore("auth", {
       console.log(response.data.user)
       // const token = useCookie('token'); // useCookie new hook in nuxt 3
       // token.value = response.data.token; // set token to cookie
-      const expiryTime = Date.now() + 60 * 60 * 1000; // 1 hour from now
-      const tokenCookie = useCookie('token', response.data.token, { expires: new Date(expiryTime) });
+      
+      // 
+      const token = useCookie('token', { expires: new Date(Date.now() + 24 * 60 * 60 * 1000) }); // Set expiry for 1 day (in milliseconds)
+      token.value = response.data.token; // Set token value
+      // refresh token
+
+      const refresh_token = useCookie('refresh_token', { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) }); // Set expiry for 7 days (in milliseconds)
+      refresh_token.value = response.data.refreshToken; // Set token value
+
+
       this.authenticated = true; // set authenticated  state value to true
       this.setUser(response.data.user)
       Swal.fire(
@@ -128,7 +138,6 @@ export const useAuthStore = defineStore("auth", {
         'Registered successfully! please verify your email😉',
         'success',
       );
-
     },
     setUser(data:any) {
       this.auth.id = data.id;

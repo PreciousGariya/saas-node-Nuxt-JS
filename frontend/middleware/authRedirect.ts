@@ -14,7 +14,7 @@ export default defineNuxtRouteMiddleware((to) => {
             
     } else {
         // not expired
-        if(emailVerified !=null && to.fullPath=="/auth/verify-email"){
+        if(emailVerified.value !=null && to.fullPath=="/auth/verify-email"){
         console.log('2')
 
             return navigateTo(`/${auth.value?.role}/`)

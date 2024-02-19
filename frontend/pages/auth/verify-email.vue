@@ -93,12 +93,7 @@ const verifyEmailHandler = async () => {
       showConfirmButton: false,
       timer: 1500
     });
-    if ((auth.emailVerified!==null)) {
-        if(auth.role==="user"){
-          router.push('/user');
-        }
-        router.push('/admin');
-    }
+    router.push('/user');
   }
 
 };
@@ -106,7 +101,7 @@ const verifyEmailHandler = async () => {
 const handleInput = (index) => {
       // If the input value is entered, move focus to the next input
       if (otpInputs.value[index] !== '') {
-        if (index < 4) {
+        if (index < 3) {
           document.getElementById(`otpInput${index + 1}`).focus();
         }
       }
