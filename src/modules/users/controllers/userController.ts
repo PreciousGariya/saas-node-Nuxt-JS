@@ -151,10 +151,11 @@ const register = async (req, res) => {
     await emailSender.sendMail(email, 'Email Verification', { otp: verificationCode, name: user.firstName + user.lastName }, 'verification-code');
     //   console.log("user", user);
     const token = jwtGenerate(user);
+    const refreshToken = generateRefreshToken(user);
 
     apiSuccess(
       res,
-      { user: await userResource(user), token },
+      { user: await userResource(user), token,refreshToken },
       "Registration Success & Please check your email for verification code"
     );
   } catch (e) {
