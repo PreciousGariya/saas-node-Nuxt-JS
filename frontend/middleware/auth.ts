@@ -27,7 +27,7 @@ export default defineNuxtRouteMiddleware((to) => {
             return navigateTo('/auth/verify-email');
         }
 
-        if (!to.fullPath.startsWith(`/${auth.value.role}`)) {
+        if (!to.fullPath.startsWith(`/${auth.value.role}`) && to.fullPath =="/auth/login" || to.fullPath =="/auth/register") {
             return navigateTo(`/${auth.value.role}/`);
         }
 

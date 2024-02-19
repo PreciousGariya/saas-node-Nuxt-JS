@@ -23,7 +23,7 @@ export const useAuthStore = defineStore("auth", {
     access_token: null,
     refresh_token: null,
     auth: {
-      _id: null,
+      id: null,
       firstName: null,
       lastName: null,
       email: null,
@@ -131,7 +131,7 @@ export const useAuthStore = defineStore("auth", {
 
     },
     setUser(data:any) {
-      this.auth._id = data._id;
+      this.auth.id = data.id;
       this.auth.firstName = data.firstName;
       this.auth.lastName = data.lastName;
       this.auth.email = data.email;
@@ -208,7 +208,7 @@ export const useAuthStore = defineStore("auth", {
       const token = useCookie('token'); // useCookie new hook in nuxt 3
       this.authenticated = false; // set authenticated  state value to false
       token.value = null; // clear the token cookie
-      this.auth._id = null;
+      this.auth.id = null;
       this.auth.firstName = null;
       this.auth.lastName = null;
       this.auth.email = null;
@@ -218,6 +218,7 @@ export const useAuthStore = defineStore("auth", {
       this.auth.stripeCustomerId = null;
       this.auth.isActive = null;
       this.auth.created_at = null;
+      return navigateTo('/auth/login');
     },
 
   },

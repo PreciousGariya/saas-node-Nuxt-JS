@@ -8,15 +8,24 @@ export default defineNuxtRouteMiddleware((to) => {
         if (to.fullPath == "/auth/verify-email") {
             return navigateTo("/auth/login")
         }
+
+        console.log('first')
+        return navigateTo("/auth/login")
             
     } else {
         // not expired
         if(emailVerified !=null && to.fullPath=="/auth/verify-email"){
-            return navigateTo(`/${auth.value?.role}/`)
-        }else if (to.fullPath == "/auth/login" || to.fullPath == "/auth/register") {
-            // dashboard
+        console.log('2')
+
             return navigateTo(`/${auth.value?.role}/`)
         }
+        else if (auth.value?.role !=null && (to.fullPath == "/auth/login" || to.fullPath == "/auth/register")) {
+            // dashboard
+        console.log('3')
+
+            return navigateTo(`/${auth.value?.role}/`)
+        }
+        console.log('4')
 
 
         // if (auth.value && auth.value.email == null) {
