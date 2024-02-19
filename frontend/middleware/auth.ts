@@ -1,41 +1,37 @@
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '~/store/auth';
+import { checkTokenExpiry } from '~/utils/checkTokenExpiry'
+import Swal from 'sweetalert2'
 
 export default defineNuxtRouteMiddleware((to) => {
-    const { authenticated , emailVerified, auth } = storeToRefs(useAuthStore()); // make authenticated state reactive
+    const router = useRouter();
+
+    const { authenticated, emailVerified, auth, access_token } = storeToRefs(useAuthStore()); // make authenticated state reactive
     const token = useCookie('token'); // get token from cookies
 
-    if(emailVerified==null) {
-        console.log('email must verify')
-        abortNavigation();
-        return navigateTo('/auth/verify-email');
+    if(!checkTokenExpiry()){
+        return navigateTo('/auth/login');
     }
-    if (token.value) {
-        // check if value exists
-        // todo verify if token is valid, before updating the state
+    if (auth.value && auth.value.email !== null) {
+        console.log('emailVerified___',checkTokenExpiry())
         authenticated.value = true; // update the state to authenticated
-    }
-    console.log(to, 'to to')
-    // if token exists and url is /login redirect to homepage
-    if (token.value && to?.name === 'auth-login') {
-        abortNavigation();
-        return navigateTo('/');
-    }
 
-    if(token.value) {
-        if (auth.value.role === 'user') {
-            // If role is user, prepend '/user/' prefix to all routes
-            to.path = `/user${to.path}`;
-          } else if (auth.value.role === 'admin') {
-            // If role is admin, prepend '/admin/' prefix to all routes
-            to.path = `/admin${to.path}`;
-          }
-        abortNavigation();
-        return navigateTo(to.path);
-    }
-    // if token doesn't exist redirect to log in
-    if (!token.value && to?.name !== 'auth-login') {
-        abortNavigation();
+        if (emailVerified.value == null) {
+            console.log('email must verify________')
+            Swal.fire(
+                'Hey!✅',
+                'Please verify your email😉',
+                'warning',
+              );
+            abortNavigation();
+            return navigateTo('/auth/verify-email');
+        }
+
+        if (!to.fullPath.startsWith(`/${auth.value.role}`)) {
+            return navigateTo(`/${auth.value.role}/`);
+        }
+
+    } else {
         return navigateTo('/auth/login');
     }
 });

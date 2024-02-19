@@ -2,7 +2,7 @@
   <div class="container content-space-3 content-space-t-lg-4 content-space-b-lg-3">
     <div class="card card-body flex-grow-1 mx-auto border-0 shadow-sm" style="max-width: 28rem;">
       <!-- Heading -->
-      <div class="text-center mb-5 mb-md-7">
+      <div class="text-center mb-2 mb-md-7">
         <h6 class="h2">Please enter the one time password to verify your account</h6>
         <p><span>A code has been sent to </span> <small>{{ maskEmail(auth?.email) }}</small>.</p>
       </div>
@@ -33,8 +33,19 @@
     </div>
   </div>
 </template>
-
+<style scoped>
+.form-control{
+    height: 80px;
+    font-weight: 600;
+    font-size: 40px;
+    color: #656565!important;
+}
+</style>
 <script setup>
+ definePageMeta({
+    middleware:'auth-redirect'
+  });
+import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth'; // import the auth store we just created
@@ -42,9 +53,9 @@ import { useAuthStore } from '~/store/auth'; // import the auth store we just cr
 const { authenticateUser, verifyEmail,resendOtp } = useAuthStore(); // use authenticateUser action from  auth store
 
 const { authenticated, auth, emailVerified } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
-definePageMeta({
-middleware: 'auth',
-})
+// definePageMeta({
+// middleware: 'auth',
+// })
 const router = useRouter();
 const otpInputs = ref(['', '', '', '']); 
 
@@ -62,6 +73,14 @@ const maskEmail = (email) => {
 
 const verifyEmailHandler = async () => {
   const otp = otpInputs.value.join('');
+  if(!otp){
+    Swal.fire(
+          'Oh Oo!⚠️',
+          'Please Enter One time password first',
+          'error',
+        )
+        return false;
+  }
   const data = { verification_code: parseInt(otp), email: auth.value?.email }
 
   await verifyEmail(data); // call authenticateUser and pass the user object

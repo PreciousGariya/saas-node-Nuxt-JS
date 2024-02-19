@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:hestabit@123@localhost:3306/node_saas"
+}
+
+// Define the User model
+model User {
+  id                 Int                @id @default(autoincrement())
+  email              String             @unique
+  password           String
+  firstName          String?
+  lastName           String
+  phone              String
+  stripeCustomerId   String?
+  emailVerified      DateTime?
+  subscriptionStatus String?
+  role               UserRole           @default(user)
+  isActive           Boolean            @default(true)
+  createdAt          DateTime           @default(now())
+  VerificationCode   VerificationCode[]
+}
+
+// Define the UserRole enum
+enum UserRole {
+  user
+  admin
+}
+
+model VerificationCode {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [user_id], references: [id])
+  user_id   Int
+  code      String
+  createdAt DateTime @default(now())
+}
+
+
+model Subscription {
+  id        Int      @id @default(autoincrement())
+  title String
+  description String?
+  image String?
+  price Float
+  stripe_plan_id String
+  is_active Boolean @default(true)
+  createdAt DateTime @default(now())
+
+}
+
+

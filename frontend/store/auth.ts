@@ -62,9 +62,11 @@ export const useAuthStore = defineStore("auth", {
         return;
       }
       console.log(response.data.user)
-      const token = useCookie('token'); // useCookie new hook in nuxt 3
-      token.value = response.data.token; // set token to cookie
-      this.access_token = response.data.token;
+      // const token = useCookie('token'); // useCookie new hook in nuxt 3
+      // token.value = response.data.token; // set token to cookie
+      // this.access_token = response.data.token;
+      const token = useCookie('token', { expires: new Date(Date.now() + 24 * 60 * 60 * 1000) }); // Set expiry for 1 day (in milliseconds)
+      token.value = response.data.token; // Set token value
       this.refresh_token = response.data.refreshToken;
       this.authenticated = true; // set authenticated  state value to true
       this.setUser(response.data.user)
@@ -163,6 +165,12 @@ export const useAuthStore = defineStore("auth", {
         )
         return;
 
+      }else{
+        Swal.fire(
+          'Oh Oo!⚠️',
+          response.message,
+          'error',
+        )
       }
     },
     async resendOtp(email:string){

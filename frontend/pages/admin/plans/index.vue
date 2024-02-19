@@ -27,6 +27,7 @@
   <script setup>
   definePageMeta({
     layout: 'admin',
+    middleware:'auth'
   })
   
   const {users, getUsers} = useUser();

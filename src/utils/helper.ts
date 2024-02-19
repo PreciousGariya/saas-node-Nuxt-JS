@@ -5,7 +5,7 @@ const jwtSecret = "ae2c3a9bd522450d86d7e7a786ec4f3a"; // replace with a strong, 
 const jwtGenerate = (user) => {
   console.log('user',user);
  try {
-    const token = jwt.sign({ userId: user._id, email: user.email }, jwtSecret, {
+    const token = jwt.sign({ user_id: user.id, email: user.email }, jwtSecret, {
       expiresIn: '1h',
     });
     return token;
@@ -15,7 +15,7 @@ const jwtGenerate = (user) => {
 };
 const generateRefreshToken = (user) => {
   try{
-    const refreshToken = jwt.sign({ type:'refreshtoken',userId: user._id }, jwtSecret, {
+    const refreshToken = jwt.sign({ type:'refreshtoken',user_id: user.id }, jwtSecret, {
       expiresIn: '7d', // Longer expiration time for the refresh token
     });
     return refreshToken;

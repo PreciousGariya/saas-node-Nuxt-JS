@@ -51,6 +51,9 @@
 </template>
 
 <script setup>
+  definePageMeta({
+    middleware:'auth-redirect'
+  })
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth'; // import the auth store we just created

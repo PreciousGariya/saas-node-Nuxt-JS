@@ -30,7 +30,7 @@
           <template v-if="authenticated">
             <li class="nav-item dropdown">
               <a href="javascript:void(0)" class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle" id="auth-dropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                Mr Admin
+                mr admin
               </a>
               <ul class="dropdown-menu dropdown-menu-md-end border-0 shadow-lg rounded-0" aria-labelledby="auth-dropdown">
                 <li><NuxtLink :to="{name: 'admin'}" class="dropdown-item">Dashboard</NuxtLink></li>
@@ -55,7 +55,7 @@ import { useAuthStore } from '~/store/auth'; // import the auth store we just cr
 const router = useRouter();
 
 const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
-const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+const { authenticated, auth } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
 
 const logout = () => {
   logUserOut();

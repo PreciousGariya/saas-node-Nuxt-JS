@@ -14,7 +14,7 @@
     </div>
     <div class="dropdown me-3">
       <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          Mr Admin
+          {{`${user.firstName} ${user.lastName}`}}
       </a>
       <ul class="dropdown-menu dropdown-menu-md-end border-0 shadow-lg rounded-0">
           <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -35,8 +35,9 @@ import { useAuthStore } from '~/store/auth'; // import the auth store we just cr
 const router = useRouter();
 
 const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
-const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+const { authenticated, auth } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
 
+const user = ref(auth.value)
 const logout = () => {
   logUserOut();
   router.push('/auth/login');
