@@ -11,13 +11,19 @@ export default defineNuxtRouteMiddleware((to) => {
             
     } else {
         // not expired
-        if (auth.value && auth.value.email == null) {
-            //need verify
-            return navigateTo("auth/verify-email")
-        } else if (to.fullPath == "/auth/login" || to.fullPath == "/auth/register") {
+        if(emailVerified !=null && to.fullPath=="/auth/verify-email"){
+            return navigateTo(`/${auth.value?.role}/`)
+        }else if (to.fullPath == "/auth/login" || to.fullPath == "/auth/register") {
             // dashboard
             return navigateTo(`/${auth.value?.role}/`)
         }
+
+
+        // if (auth.value && auth.value.email == null) {
+        //     //need verify
+        //     console.log('first')
+        //     return navigateTo("auth/verify-email")
+        // } 
     }
 
 });
