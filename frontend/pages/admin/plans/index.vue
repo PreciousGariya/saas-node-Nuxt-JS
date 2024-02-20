@@ -1,11 +1,12 @@
 <template>
-  <div class="d-flex justify-content-between mb-4">
+  <div>
+    <div class="d-flex justify-content-between mb-4">
     <h1 class="h3 ">Plans</h1>
     <NuxtLink to="/admin/plans/create" class="btn btn-primary">Create
       <Icon name="majesticons:plus" />
     </NuxtLink>
   </div>
-  <div class="row">
+  <div class="row" v-if="plans.length>0">
     <div class="col-12 col-md-3" v-for="plan in plans" :key="plan.id">
       <div class="card">
         <img class="card-img-top" src="https://demo-basic.adminkit.io/img/photos/unsplash-1.jpg" alt="Unsplash">
@@ -20,9 +21,13 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <p>No Plans Available</p>
+  </div>
+  </div>
 </template>
   
-<script lang="ts" setup>
+<script setup>
 definePageMeta({
   layout: 'admin',
   middleware: 'auth'
@@ -35,7 +40,7 @@ onMounted(async () => {
     'Content-Type': 'application/json',
     'Authorization': token.value,
   }
-  const { data, pending }: any = await useFetch(`/api/plans`, {
+  const { data, pending } = await useFetch(`/api/plans`, {
     method: 'get',
     headers: header,
   });

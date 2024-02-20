@@ -4,7 +4,6 @@ import axios, { AxiosResponse } from 'axios';
 const runtimeConfig = useRuntimeConfig()
 
 export default defineEventHandler(async (event) => {
-  return {'hello'}
     // const data = await readBody(event)
     const header = getHeaders(event)
     // axos post
