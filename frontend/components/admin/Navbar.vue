@@ -1,31 +1,184 @@
 <template>
-  <header class="admin navbar bg-body-tertiary sticky-top flex-md-nowrap p-0 shadow-sm">
-    <NuxtLink to="/admin" class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6">
-      <svg viewBox="0 0 24 24" width="1.2em" height="1.2em" class="inline-block mr-2 text-lg text-primary-500"><path fill="currentColor" d="M9.078 3.965c-.588 0-1.177.289-1.514.867L.236 17.433c-.672 1.156.17 2.601 1.514 2.601h5.72a1.676 1.676 0 0 1-.35-2.117l5.547-9.513l-2.076-3.572a1.734 1.734 0 0 0-1.513-.867zm7.407 2.922c-.487 0-.973.236-1.252.709L9.17 17.906c-.557.945.138 2.13 1.251 2.13h12.13c1.114 0 1.81-1.185 1.253-2.13l-6.067-10.31a1.437 1.437 0 0 0-1.252-.71z"></path></svg>
-      Nuxt3 Stater
-    </NuxtLink>
-    <button class="navbar-toggler d-md-none collapsed me-4" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-nav">
-      <div class="nav-item text-nowrap">
-        <NuxtLink to="/" class="nav-link px-3">Home</NuxtLink>
-      </div>
-    </div>
-    <div class="dropdown me-3">
-      <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          {{`${user.firstName} ${user.lastName}`}}
-      </a>
-      <ul class="dropdown-menu dropdown-menu-md-end border-0 shadow-lg rounded-0">
-          <li><a class="dropdown-item" href="#">Profile</a></li>
-          <li><a class="dropdown-item" href="#">Change Password</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li>
-            <NuxtLink class="dropdown-item" @click="logout">Logout</NuxtLink>
-          </li>
+  <!--  -->
+  <nav class="navbar navbar-expand navbar-light navbar-bg">
+    <a class="sidebar-toggle js-sidebar-toggle" @click="handleToggleSideBar">
+      <!-- <i class="hamburger align-self-center"></i> -->
+      <Icon name="heroicons-solid:menu-alt-1" height="2rem" width="2rem"/>
+    </a>
+
+    <div class="navbar-collapse collapse">
+      <ul class="navbar-nav navbar-align">
+        <li class="nav-item dropdown">
+          <NuxtLink class="nav-icon dropdown-toggle" to="/" id="alertsDropdown" data-bs-toggle="dropdown">
+            <div class="position-relative">
+              <!-- <i class="align-middle" data-feather="bell"></i> -->
+              <Icon name="mdi:bell-outline"/>
+              <span class="indicator">4</span>
+            </div>
+          </NuxtLink>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+            <div class="dropdown-menu-header">
+              4 New Notifications
+            </div>
+            <div class="list-group">
+              <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                  <div class="col-2">
+                    <i class="text-danger" data-feather="alert-circle"></i>
+                  </div>
+                  <div class="col-10">
+                    <div class="text-dark">Update completed</div>
+                    <div class="text-muted small mt-1">Restart server 12 to complete the update.
+                    </div>
+                    <div class="text-muted small mt-1">30m ago</div>
+                  </div>
+                </div>
+              </a>
+              <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                  <div class="col-2">
+                    <Icon name="mdi:bell-outline"/>
+                  </div>
+                  <div class="col-10">
+                    <div class="text-dark">Lorem ipsum</div>
+                    <div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate
+                      hendrerit et.</div>
+                    <div class="text-muted small mt-1">2h ago</div>
+                  </div>
+                </div>
+              </a>
+              <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                  <div class="col-2">
+                    <Icon name="mdi:bell-outline"/>
+                  </div>
+                  <div class="col-10">
+                    <div class="text-dark">Login from 192.186.1.8</div>
+                    <div class="text-muted small mt-1">5h ago</div>
+                  </div>
+                </div>
+              </a>
+              <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                  <div class="col-2">
+                    <!-- <i class="text-success" data-feather="user-plus"></i> -->
+                    <Icon name="mdi:bell-outline"/>
+                  </div>
+                  <div class="col-10">
+                    <div class="text-dark">New connection</div>
+                    <div class="text-muted small mt-1">Christina accepted your request.</div>
+                    <div class="text-muted small mt-1">14h ago</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="dropdown-menu-footer">
+              <a href="#" class="text-muted">Show all notifications</a>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-bs-toggle="dropdown">
+            <div class="position-relative">
+              <i class="align-middle" data-feather="message-square"></i>
+              <Icon name="material-symbols:chat-outline"/>
+            </div>
+          </a>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="messagesDropdown">
+            <div class="dropdown-menu-header">
+              <div class="position-relative">
+                4 New Messages
+              </div>
+            </div>
+            <div class="list-group">
+              <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                  <div class="col-2">
+                    <img src="https://demo-basic.adminkit.io/img/avatars/avatar-5.jpg"
+                      class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
+                  </div>
+                  <div class="col-10 ps-2">
+                    <div class="text-dark">Vanessa Tucker</div>
+                    <div class="text-muted small mt-1">Nam pretium turpis et arcu. Duis arcu
+                      tortor.</div>
+                    <div class="text-muted small mt-1">15m ago</div>
+                  </div>
+                </div>
+              </a>
+              <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                  <div class="col-2">
+                    <img src="https://demo-basic.adminkit.io/img/avatars/avatar-2.jpg"
+                      class="avatar img-fluid rounded-circle" alt="William Harris">
+                  </div>
+                  <div class="col-10 ps-2">
+                    <div class="text-dark">William Harris</div>
+                    <div class="text-muted small mt-1">Curabitur ligula sapien euismod vitae.
+                    </div>
+                    <div class="text-muted small mt-1">2h ago</div>
+                  </div>
+                </div>
+              </a>
+              <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                  <div class="col-2">
+                    <img src="https://demo-basic.adminkit.io/img/avatars/avatar-4.jpg"
+                      class="avatar img-fluid rounded-circle" alt="Christina Mason">
+                  </div>
+                  <div class="col-10 ps-2">
+                    <div class="text-dark">Christina Mason</div>
+                    <div class="text-muted small mt-1">Pellentesque auctor neque nec urna.</div>
+                    <div class="text-muted small mt-1">4h ago</div>
+                  </div>
+                </div>
+              </a>
+              <a href="#" class="list-group-item">
+                <div class="row g-0 align-items-center">
+                  <div class="col-2">
+                    <img src="https://demo-basic.adminkit.io/img/avatars/avatar-3.jpg"
+                      class="avatar img-fluid rounded-circle" alt="Sharon Lessman">
+                  </div>
+                  <div class="col-10 ps-2">
+                    <div class="text-dark">Sharon Lessman</div>
+                    <div class="text-muted small mt-1">Aenean tellus metus, bibendum sed,
+                      posuere ac, mattis non.</div>
+                    <div class="text-muted small mt-1">5h ago</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="dropdown-menu-footer">
+              <a href="#" class="text-muted">Show all messages</a>
+            </div>
+          </div>
+        </li>
+        <ThemeChanger />
+        <LangSwitcher />
+        <li class="nav-item dropdown">
+          <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+            <i class="align-middle" data-feather="settings"></i>
+          </a>
+
+          <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+            <img src="https://demo-basic.adminkit.io/img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1"
+              alt="Charles Hall" /> <span class="text-dark"> {{ `${user.firstName} ${user.lastName}` }}</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-end">
+            <NuxtLink class="dropdown-item" to="/auth/profile"><i class="align-middle me-1" data-feather="user"></i>
+              Profile</NuxtLink>
+            <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i>
+              Analytics</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings
+              & Privacy</a>
+            <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
+            <div class="dropdown-divider"></div>
+            <NuxtLink class="dropdown-item" href="#" @click="logout">Log out</NuxtLink>
+          </div>
+        </li>
       </ul>
     </div>
-</header>
+  </nav>
 </template>
 
 <script setup>
@@ -43,6 +196,16 @@ const logout = () => {
   router.push('/auth/login');
 };
 
+const handleToggleSideBar = () =>{
+  // localStorage.setItem('sidebar', 'collapsed');
+  let sidebar = document.getElementById('sidebar');
+  if(sidebar.classList.contains('collapsed')){
+    sidebar.classList.remove('collapsed')
+  }else{
+    sidebar.classList.add('collapsed')
+  }
+  
+}
 
 const storedTheme = localStorage.getItem('theme');
 const selectedTheme = ref(storedTheme ?? 'dark');
@@ -96,14 +259,3 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () 
 
 </script>
 
-<style scoped>
-.bi {
-  width: 1em;
-  height: 1em;
-  vertical-align: -.125em;
-  fill: currentcolor;
-}
-.navbar-brand svg {
-  color: rgba(59,166,118);
-}
-</style>

@@ -320,5 +320,4 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-
 export { login, register, refreshToken, verifyEmail, sendVerificationEmail };

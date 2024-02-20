@@ -13,6 +13,9 @@ const JWTMiddleware = (req, res, next) => {
   try {
     const decoded = validateToken(token);
     console.log('___________________decoded________________', decoded);
+    if(decoded==null){
+        return apiError(res, 422, false,"Token has expired please login again");
+    }
     if(!decoded) {
       return apiError(res, 422, false,'Invalid token or may be Token has expired');
       // return catchException(res, 'Invalid token or may be Token has expired');

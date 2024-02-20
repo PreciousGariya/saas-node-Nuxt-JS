@@ -1,7 +1,8 @@
 import express from 'express';
 import { Stripe } from 'stripe';
+import { prisma } from '../../../config/prisma';
 import { stripeData } from '../../../utils/EnvData';
-import { apiError, apiSuccess } from '../../../utils/helper';
+import { apiError, apiSuccess, trimText } from '../../../utils/helper';
 
 
 
@@ -122,5 +123,45 @@ const createCheckoutSession = async (req, res) => {
 }
 
 
+const createProductAndPlan =async (req, res) => {
+  try {
+    // Step 1: Create a product
+    const {title, price , description } = req.body;
 
-export { createCheckoutSession, createStripeCustomer,checkSubscriptionStatus, listProducts, getPrice }
+    // console.log('req.body',req.body)
+    const product = await stripe.products.create({
+      name: title, // Replace with your product name
+      description: trimText(description,20), // Add a description if needed
+    });
+    
+    const plan = await stripe.plans.create({
+      amount: parseInt(price),
+      currency: 'usd',
+      interval: 'month',
+      product: product.id,
+    });
+
+    const plancreate = await prisma.plan.create({
+      data:{
+        stripe_plan_id: plan.id,
+        stripe_product_id: product.id,
+        price: parseFloat(price),
+        title: title,
+        description: description
+      }
+    })
+    
+
+    return apiSuccess(res,plancreate,'successfully created')
+  } catch (error) {
+    console.error('Error creating product and plan:', error);
+  }
+}
+
+const plans  = async(req, res) =>{
+  const plans = await prisma.plan.findMany();
+  return apiSuccess(res,plans,'successfully fetched');
+}
+
+
+export { createCheckoutSession, createStripeCustomer,checkSubscriptionStatus, listProducts, getPrice, createProductAndPlan , plans}

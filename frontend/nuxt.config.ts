@@ -30,7 +30,8 @@ export default defineNuxtConfig({
         '@nuxtjs/i18n',
         '@pinia/nuxt',
         '@pinia-plugin-persistedstate/nuxt',
-        'nuxt-icon'
+        'nuxt-icon',
+        'nuxt-highcharts'
     ],
     buildModules: [
         ['@pinia/nuxt', { disableVuex: true }]

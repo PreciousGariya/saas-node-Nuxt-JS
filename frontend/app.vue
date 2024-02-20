@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout>
-    <NuxtLoadingIndicator />
-    <div class="container">
+    <div class="container-fluid p-0">
+      <NuxtLoadingIndicator />
       <NuxtPage />
     </div>
   </NuxtLayout>

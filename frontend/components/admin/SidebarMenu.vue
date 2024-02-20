@@ -1,61 +1,108 @@
 <template>
-  <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-    <div class="position-sticky pt-3 sidebar-sticky">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <NuxtLink :to="`/${user.role}`" class="nav-link active">
-            <span data-feather="home" class="align-text-bottom"></span>
-            Dashboard
+  <nav id="sidebar" class="sidebar js-sidebar">
+    <div class="sidebar-content js-simplebar">
+      <NuxtLink class="sidebar-brand" to="/">
+        <span class="align-middle">
+          <Icon name="logos:nuxt-icon" width="2em" height="2em" />
+        AdminKit</span>
+      </NuxtLink>
+
+      <ul class="sidebar-nav">
+        <li class="sidebar-header">
+          Pages
+        </li>
+        <li class="sidebar-item">
+          <NuxtLink class="sidebar-link" :to="`/${user.role}`">
+            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
           </NuxtLink>
         </li>
-        <li class="nav-item" v-if="user.role == 'admin'">
-          <NuxtLink to="/admin/users" class="nav-link">
-            <span data-feather="file" class="align-text-bottom"></span>
-            Users
+
+        <li class="sidebar-item">
+          <NuxtLink :to="`/${user.role}/posts`" class="sidebar-link">
+            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Posts</span>
           </NuxtLink>
         </li>
-        <li class="nav-item">
-          <NuxtLink :to="`/${user.role}/posts`" class="nav-link">
-            <span data-feather="shopping-cart" class="align-text-bottom"></span>
-            Posts
+
+        <li class="sidebar-item">
+          <NuxtLink :to="`/${user.role}/plans`" class="sidebar-link">
+            <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Plans</span>
           </NuxtLink>
         </li>
-        <li class="nav-item">
-          <NuxtLink class="nav-link" :to="`/${user.role}/plans`">
-            <span data-feather="users" class="align-text-bottom"></span>
-            Plans
-          </NuxtLink>
-        </li>
-        <li class="nav-item" v-if="user.role == 'admin'">
-          <a class="nav-link" href="#">
-            <span data-feather="bar-chart-2" class="align-text-bottom"></span>
-            Reports
+
+        <!-- <li class="sidebar-item">
+          <a class="sidebar-link" href="pages-sign-up.html">
+            <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Sign Up</span>
           </a>
         </li>
-        <li class="nav-item" v-if="user.role == 'admin'">
-          <a class="nav-link" href="#">
-            <span data-feather="layers" class="align-text-bottom"></span>
-            Integrations
+
+        <li class="sidebar-item active">
+          <a class="sidebar-link" href="pages-blank.html">
+            <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
+          </a>
+        </li> -->
+
+        <li class="sidebar-header">
+          Tools & Components
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="ui-buttons.html">
+            <i class="align-middle" data-feather="square"></i> <span class="align-middle">Buttons</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="ui-forms.html">
+            <i class="align-middle" data-feather="check-square"></i> <span class="align-middle">Forms</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="ui-cards.html">
+            <i class="align-middle" data-feather="grid"></i> <span class="align-middle">Cards</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="ui-typography.html">
+            <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Typography</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="icons-feather.html">
+            <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Icons</span>
+          </a>
+        </li>
+
+        <li class="sidebar-header">
+          Plugins & Addons
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="charts-chartjs.html">
+            <i class="align-middle" data-feather="bar-chart-2"></i> <span class="align-middle">Charts</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="maps-google.html">
+            <i class="align-middle" data-feather="map"></i> <span class="align-middle">Maps</span>
           </a>
         </li>
       </ul>
 
-      <h6
-        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-        <span>Saved reports</span>
-        <a class="link-secondary" href="#" aria-label="Add a new report">
-          <span data-feather="plus-circle" class="align-text-bottom"></span>
-        </a>
-      </h6>
-      <ul class="nav flex-column mb-2">
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="file-text" class="align-text-bottom"></span>
-            Current month
-          </a>
-        </li>
-
-      </ul>
+      <div class="sidebar-cta">
+        <div class="sidebar-cta-content">
+          <!-- <strong class="d-inline-block mb-2">Logout</strong> -->
+          <div class="mb-3 text-sm">
+            <!-- Are you looking for more components? Check out our premium version. -->
+          </div>
+          <div class="d-grid">
+            <a href="javascript::voide(0)" @click.prevent="logout" class="btn btn-primary">Logout</a>
+          </div>
+        </div>
+      </div>
     </div>
   </nav>
 </template>
@@ -66,58 +113,8 @@ import { useAuthStore } from '~/store/auth';
 
 const { auth } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
 const user = ref(auth.value)
-
+const logout = () => {
+  logUserOut();
+  router.push('/auth/login');
+};
 </script>
-
-<style scoped>
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-
-@media (min-width: 768px) {
-  .bd-placeholder-img-lg {
-    font-size: 3.5rem;
-  }
-}
-
-.b-example-divider {
-  height: 3rem;
-  background-color: rgba(0, 0, 0, .1);
-  border: solid rgba(0, 0, 0, .15);
-  border-width: 1px 0;
-  box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-}
-
-.b-example-vr {
-  flex-shrink: 0;
-  width: 1.5rem;
-  height: 100vh;
-}
-
-.bi {
-  vertical-align: -.125em;
-  fill: currentColor;
-}
-
-.nav-scroller {
-  position: relative;
-  z-index: 2;
-  height: 2.75rem;
-  overflow-y: hidden;
-}
-
-.nav-scroller .nav {
-  display: flex;
-  flex-wrap: nowrap;
-  padding-bottom: 1rem;
-  margin-top: -1px;
-  overflow-x: auto;
-  text-align: center;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-}
-</style>

@@ -1,21 +1,44 @@
 <template>
-    <div>
-        <slot name="header">
-            <AdminNavbar />
-        </slot>
-        <div class="container-fluid">
-            <div class="row">
-                <AdminSidebarMenu :user="user" />
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div
-                        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <Breadcrumbs />
+    <div class="wrapper">
+       <AdminSidebarMenu/>
+
+        <div class="main">
+            <AdminNavbar/>
+
+            <main class="content">
+                <slot />
+            </main>
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-muted">
+                        <div class="col-6 text-start">
+                            <p class="mb-0">
+                                <NuxtLink class="text-muted" to="/"
+                                    target="_blank"><strong>Node</strong></NuxtLink> - <a class="text-muted" target="_blank"><strong>SAAS Application</strong></a> &copy;
+                            </p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <NuxtLink class="text-muted" to="/" target="_blank">Support</NuxtLink>
+                                </li>
+                                <li class="list-inline-item">
+                                    <NuxtLink class="text-muted" to="/" target="_blank">Help Center</NuxtLink>
+                                </li>
+                                <li class="list-inline-item">
+                                    <NuxtLink class="text-muted" to="/" target="_blank">Privacy</NuxtLink>
+                                </li>
+                                <li class="list-inline-item">
+                                    <NuxtLink class="text-muted" to="/" target="_blank">Terms</NuxtLink>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <slot />
-                </main>
-            </div>
-        </div>
+                </div>
+            </footer>
     </div>
+</div>
 </template>
   
 <script lang="ts" setup>
@@ -27,7 +50,7 @@ const router = useRouter();
 
 const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
 const { authenticated, auth } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
-const user= ref(auth.value)
+const user = ref(auth.value)
 const logout = () => {
     logUserOut();
     router.push('/auth/login');

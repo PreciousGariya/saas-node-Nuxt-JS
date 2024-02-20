@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root@localhost:3306/node_saas"
+  url      = "mysql://sammy:password@localhost:3306/node_saas"
 }
 
 // Define the User model
@@ -25,6 +25,9 @@ model User {
   isActive           Boolean            @default(true)
   createdAt          DateTime           @default(now())
   VerificationCode   VerificationCode[]
+  Subscription           Subscription[]
+  SubscriptionHasInvoice SubscriptionHasInvoice[]
+  SubscriptionHasProduct SubscriptionHasProduct[]
 }
 
 // Define the UserRole enum
@@ -41,17 +44,52 @@ model VerificationCode {
   createdAt DateTime @default(now())
 }
 
+model Plan {
+   id                     Int                      @id @default(autoincrement())
+   stripe_plan_id String
+   stripe_product_id String
+   price Float
+   title String
+   description String?
+   createdAt DateTime @default(now())
+}
+
 
 model Subscription {
-  id        Int      @id @default(autoincrement())
-  title String
-  description String?
-  image String?
-  price Float
-  stripe_plan_id String
-  is_active Boolean @default(true)
-  createdAt DateTime @default(now())
-
+  id                     Int                      @id @default(autoincrement())
+  subscriptionId         String?                  @unique
+  status                 String?
+  startDate              DateTime?
+  endDate                DateTime?
+  amount                 Decimal
+  User                   User                    @relation(fields: [user_id], references: [id])
+  user_id                 Int
+  SubscriptionHasInvoice SubscriptionHasInvoice[]
+  SubscriptionHasProduct SubscriptionHasProduct[]
 }
+
+model SubscriptionHasInvoice {
+  id             Int          @id @default(autoincrement())
+  invoiceId      String       @unique
+  pdf            String?
+  amount         Decimal
+  status         String?
+  Subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  subscriptionId Int
+  User           User        @relation(fields: [user_id], references: [id])
+  user_id         Int
+}
+
+model SubscriptionHasProduct {
+  id             Int          @id @default(autoincrement())
+  productId      String       @unique
+  qty            Int          @default(1)
+  productName    String?
+  Subscription   Subscription @relation(fields: [SubscriptionId], references: [id])
+  SubscriptionId Int
+  User           User        @relation(fields: [user_id], references: [id])
+  user_id         Int
+}
+
 
 

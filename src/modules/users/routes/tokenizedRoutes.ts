@@ -6,4 +6,6 @@ import { refreshToken, sendVerificationEmail ,verifyEmail} from '../controllers/
 tokenizedRoutes.post('/refresh-token', JWTMiddleware, refreshToken);
 tokenizedRoutes.post('/send-verification-email',JWTMiddleware, sendVerificationEmail);
 tokenizedRoutes.post('/verify-email', JWTMiddleware, verifyEmail);
+
+
 export {tokenizedRoutes}

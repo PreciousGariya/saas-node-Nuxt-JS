@@ -1,52 +1,60 @@
 <template>
-    <div>
-      <h1>Users</h1>
-      <table class="table">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Username</th>
-          <th scope="col">Email</th>
-          <th scope="col">Phone</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="user in users" :key="user.id">
-          <th scope="row">{{ user.id }}</th>
-          <td>{{ user.name }}</td>
-          <td>{{ user.username }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.phone }}</td>
-        </tr>
-        </tbody>
-      </table>
+  <div class="d-flex justify-content-between mb-4">
+    <h1 class="h3 ">Plans</h1>
+    <NuxtLink to="/admin/plans/create" class="btn btn-primary">Create
+      <Icon name="majesticons:plus" />
+    </NuxtLink>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-3" v-for="plan in plans" :key="plan.id">
+      <div class="card">
+        <img class="card-img-top" src="https://demo-basic.adminkit.io/img/photos/unsplash-1.jpg" alt="Unsplash">
+        <div class="card-header" :id="plan.id">
+          <h5 class="card-title mb-0">{{ plan.title }}</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ plan.description }}</p>
+          <a href="#" class="card-link">{{ plan.price }}</a>
+          <a href="#" class="card-link">Edit</a>
+        </div>
+      </div>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script setup>
-  definePageMeta({
-    layout: 'admin',
-    middleware:'auth'
-  })
-  
-  const {users, getUsers} = useUser();
-  
-  onMounted(async () => {
-    await getUsers()
-  })
-  
-  /*const {
-    data: users,
-    pending: fetchUsers,
-    error: fetchUsersError,
-      refresh,
-  } = useAsyncData('get-users', async () => {
-    let response
-    try {
-      response = await getUsers()
-    } catch (error){}
-    return response;
-  })*/
-  
-  </script>
+<script lang="ts" setup>
+definePageMeta({
+  layout: 'admin',
+  middleware: 'auth'
+})
+
+const plans = ref(null)
+onMounted(async () => {
+  const token = await useCookie('token');
+  const header = {
+    'Content-Type': 'application/json',
+    'Authorization': token.value,
+  }
+  const { data, pending }: any = await useFetch(`/api/plans`, {
+    method: 'get',
+    headers: header,
+  });
+
+  plans.value = data._rawValue.data;
+
+})
+
+/*const {
+  data: users,
+  pending: fetchUsers,
+  error: fetchUsersError,
+    refresh,
+} = useAsyncData('get-users', async () => {
+  let response
+  try {
+    response = await getUsers()
+  } catch (error){}
+  return response;
+})*/
+
+</script>

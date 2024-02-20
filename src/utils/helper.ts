@@ -67,6 +67,31 @@ const catchException = (res, error) => {
     error: error,
   });
 };
+
+const splitText = (text, maxLength) => {
+  const regex = new RegExp(`.{1,${maxLength}}`, 'g');
+  return text.match(regex) || [];
+}
+
+const trimText = (description, number) => {
+  // Split the description into words
+  const words = description.split(/\s+/);
+
+  // Take the first 20 words and join them back into a string
+  const trimmedDescription = words.slice(0, number).join(' ');
+
+  return trimmedDescription;
+};
+
+const slugify = (text) => {
+  return text.toString().toLowerCase()
+      .replace(/\s+/g, '-')           // Replace spaces with -
+      .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+      .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+      .replace(/^-+/, '')             // Trim - from start of text
+      .replace(/-+$/, '');            // Trim - from end of text
+}
+
 export {
   jwtSecret,
   jwtGenerate,
@@ -75,5 +100,8 @@ export {
   catchException,
   generateRefreshToken,
   validateRefreshToken,
-  validateToken
+  validateToken,
+  splitText,
+  slugify,
+  trimText
 };
