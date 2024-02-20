@@ -1,5 +1,14 @@
 {
   "welcome": "Bienvenido a Nuxt 3 Starter",
   "hello": "こんにちは、{name}！",
-  "language": "言語"
+  "language": "言語",
+  "price" : "価格",
+  "title" : "タイトル",
+  "description" : "説明",
+  "submit": "提出する",
+  "list" : "リスト",
+  "Plan Create" :"計画の作成",
+  "Plans" :"予定",
+  "create" : "作成する",
+  "post" : "役職"
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-between mb-4">
     <h1 class="h3 ">Post Create</h1>
-    <NuxtLink to="/admin/posts/" class="btn btn-primary">List
+    <NuxtLink to="/admin/posts/" class="btn btn-primary">{{  $t('List') }}
       <Icon name="majesticons:plus" />
     </NuxtLink>
   </div>
@@ -13,13 +13,13 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group mb-2">
-                <label id="name-label" for="name">Title</label>
+                <label id="name-label" for="name">{{  $t('Title') }}</label>
                 <input type="text" name="name" id="name" placeholder="Enter your name" class="form-control" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group mb-2">
-                <label id="email-label" for="email">Email</label>
+                <label id="email-label" for="email">{{  $t('email') }}</label>
                 <input type="email" name="email" id="email" placeholder="Enter your email" class="form-control" required>
               </div>
             </div>

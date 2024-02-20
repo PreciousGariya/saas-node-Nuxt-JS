@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-between mb-4">
-    <h1 class="h3 ">Posts</h1>
-    <NuxtLink to="/admin/posts/create" class="btn btn-primary">Create <Icon name="majesticons:plus" /></NuxtLink>
+    <h1 class="h3 ">{{  $t('Posts') }}</h1>
+    <NuxtLink to="/admin/posts/create" class="btn btn-primary">{{  $t('Create') }} <Icon name="majesticons:plus" /></NuxtLink>
   </div>
 
  <div class="row">

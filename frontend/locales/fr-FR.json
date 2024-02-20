@@ -1,5 +1,15 @@
 {
     "welcome": "Bienvenue dans Nuxt 3 Starter",
     "hello": "Bonjour, {name}!",
-    "language": "Langue"
+    "language": "Langue",
+    "price" : "prix",
+    "title" : "titre",
+    "description" : "description",
+    "submit": "soumettre",
+    "list" : "liste",
+    "Plan Create" :"Créer un plan",
+    "Plans" :"Des plans",
+    "Create" : "créer",
+    "Post" : "Poste",
+    "Posts" : "Postes"
 }

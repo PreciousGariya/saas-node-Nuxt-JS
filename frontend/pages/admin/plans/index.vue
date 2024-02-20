@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="d-flex justify-content-between mb-4">
-    <h1 class="h3 ">Plans</h1>
-    <NuxtLink to="/admin/plans/create" class="btn btn-primary">Create
+    <h1 class="h3 ">{{  $t('Plans') }}</h1>
+    <NuxtLink to="/admin/plans/create" class="btn btn-primary">{{  $t('Create') }}
       <Icon name="majesticons:plus" />
     </NuxtLink>
   </div>
-  <div class="row" v-if="plans.length>0">
+  <div class="row" v-if="plans">
     <div class="col-12 col-md-3" v-for="plan in plans" :key="plan.id">
       <div class="card">
         <img class="card-img-top" src="https://demo-basic.adminkit.io/img/photos/unsplash-1.jpg" alt="Unsplash">
