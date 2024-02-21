@@ -7,27 +7,28 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root@localhost:3306/node_saas"
+  url      = "mysql://sammy:password@localhost:3306/node_saas"
 }
 
 // Define the User model
 model User {
-  id                 Int                @id @default(autoincrement())
-  email              String             @unique
-  password           String
-  firstName          String?
-  lastName           String
-  phone              String
-  stripeCustomerId   String?
-  emailVerified      DateTime?
-  subscriptionStatus String?
-  role               UserRole           @default(user)
-  isActive           Boolean            @default(true)
-  createdAt          DateTime           @default(now())
-  VerificationCode   VerificationCode[]
+  id                     Int                      @id @default(autoincrement())
+  email                  String                   @unique
+  password               String
+  firstName              String?
+  lastName               String
+  phone                  String
+  stripeCustomerId       String?
+  emailVerified          DateTime?
+  subscriptionStatus     String?
+  role                   UserRole                 @default(user)
+  isActive               Boolean                  @default(true)
+  createdAt              DateTime                 @default(now())
+  VerificationCode       VerificationCode[]
   Subscription           Subscription[]
   SubscriptionHasInvoice SubscriptionHasInvoice[]
   SubscriptionHasProduct SubscriptionHasProduct[]
+  Post                   Post[]
 }
 
 // Define the UserRole enum
@@ -45,15 +46,15 @@ model VerificationCode {
 }
 
 model Plan {
-   id                     Int                      @id @default(autoincrement())
-   stripe_plan_id String
-   stripe_product_id String
-   price Float
-   title String
-   description String?
-   createdAt DateTime @default(now())
+  id                Int      @id @default(autoincrement())
+  stripe_price_id   String
+  stripe_product_id String
+  interval          String
+  price             Float
+  title             String
+  description       String?
+  createdAt         DateTime @default(now())
 }
-
 
 model Subscription {
   id                     Int                      @id @default(autoincrement())
@@ -62,8 +63,8 @@ model Subscription {
   startDate              DateTime?
   endDate                DateTime?
   amount                 Decimal
-  User                   User                    @relation(fields: [user_id], references: [id])
-  user_id                 Int
+  User                   User                     @relation(fields: [user_id], references: [id])
+  user_id                Int
   SubscriptionHasInvoice SubscriptionHasInvoice[]
   SubscriptionHasProduct SubscriptionHasProduct[]
 }
@@ -76,8 +77,8 @@ model SubscriptionHasInvoice {
   status         String?
   Subscription   Subscription @relation(fields: [subscriptionId], references: [id])
   subscriptionId Int
-  User           User        @relation(fields: [user_id], references: [id])
-  user_id         Int
+  User           User         @relation(fields: [user_id], references: [id])
+  user_id        Int
 }
 
 model SubscriptionHasProduct {
@@ -87,9 +88,41 @@ model SubscriptionHasProduct {
   productName    String?
   Subscription   Subscription @relation(fields: [SubscriptionId], references: [id])
   SubscriptionId Int
-  User           User        @relation(fields: [user_id], references: [id])
-  user_id         Int
+  User           User         @relation(fields: [user_id], references: [id])
+  user_id        Int
 }
 
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  parent_id   Int?
+  parent      Category?  @relation("ChildCategories", fields: [parent_id], references: [id])
+  children    Category[] @relation("ChildCategories")
+  posts       Post[]
+}
 
+model Post {
+  id          Int       @id @default(autoincrement())
+  user_id     Int // Foreign key referencing the User model
+  category_id Int? // Nullable foreign key referencing the Category model
+  parent_id   Int? // Nullable foreign key referencing the same Post model
+  title       String
+  metaTitle   String?
+  slug        String    @unique
+  summary     String?
+  published   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  publishedAt DateTime?
+  content     String?
 
+  // Define the foreign key relationship with the User model
+  author   User      @relation(fields: [user_id], references: [id])
+  // Define the foreign key relationship with the Category model
+  category Category? @relation(fields: [category_id], references: [id])
+
+  // Define the parent-child relationship within the Post model
+  parent   Post?  @relation("ChildPosts", fields: [parent_id], references: [id])
+  children Post[] @relation("ChildPosts")
+}

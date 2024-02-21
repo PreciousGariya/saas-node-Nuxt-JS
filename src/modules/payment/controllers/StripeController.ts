@@ -100,13 +100,13 @@ const getPrice = async (req, res) => {
 }
 const createCheckoutSession = async (req, res) => {
     try {
-        const { userId, priceId } = req.body;
+        const { user_id, price_id } = req.body;
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
-            customer: userId, // Assume userId is the Stripe Customer ID associated with the user
+            customer: user_id, // Assume userId is the Stripe Customer ID associated with the user
             line_items: [
                 {
-                    price: priceId,
+                    price: price_id,
                     quantity: 1,
                 },
             ],
@@ -126,7 +126,7 @@ const createCheckoutSession = async (req, res) => {
 const createProductAndPlan =async (req, res) => {
   try {
     // Step 1: Create a product
-    const {title, price , description } = req.body;
+    const {title, price , description, interval } = req.body;
 
     // console.log('req.body',req.body)
     const product = await stripe.products.create({
@@ -134,22 +134,24 @@ const createProductAndPlan =async (req, res) => {
       description: trimText(description,20), // Add a description if needed
     });
     
-    const plan = await stripe.plans.create({
-      amount: parseInt(price),
-      currency: 'usd',
-      interval: 'month',
+    const priceCreate = await stripe.prices.create({
       product: product.id,
+      unit_amount: parseInt(price),
+      currency: 'usd',
+      recurring: { interval: interval },
     });
 
     const plancreate = await prisma.plan.create({
       data:{
-        stripe_plan_id: plan.id,
+        stripe_price_id: priceCreate.id,
         stripe_product_id: product.id,
         price: parseFloat(price),
+        interval :interval,
         title: title,
         description: description
       }
     })
+    
     
 
     return apiSuccess(res,plancreate,'successfully created')

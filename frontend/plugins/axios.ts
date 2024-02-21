@@ -1,13 +1,18 @@
-import axios from "axios"
-
+import axios from 'axios';
 export default defineNuxtPlugin((NuxtApp) => {
-
-    axios.defaults.withCredentials = true;
-    axios.defaults.baseURL = process.env.API_URL
-
+    const defaultUrl = process.env.API_URL;
+    const token = useCookie('token');
+    // Create the Axios instance
+    const api = axios.create({
+        baseURL: defaultUrl,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token.value,
+        },
+    });
     return {
-        provide: { 
-            axios: axios
+        provide: {
+            axios: axios,
         },
     }
 })

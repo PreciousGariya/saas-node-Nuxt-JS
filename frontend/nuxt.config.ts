@@ -2,6 +2,7 @@
 
 export default defineNuxtConfig({
     ssr: process.env.NODE_ENV !== "development",
+
     runtimeConfig: {
         public: {
             API_BASE_URL: process.env.API_URL,
@@ -15,7 +16,7 @@ export default defineNuxtConfig({
             title: 'Nuxt 3 Starter Template',
             meta: [
                 // <meta name="description" content="My amazing site">
-                {name: 'description', content: 'Nuxt 3 Starter'}
+                { name: 'description', content: 'Nuxt 3 Starter' }
             ],
         }
     },
@@ -25,7 +26,15 @@ export default defineNuxtConfig({
     plugins: [
         'plugins/bootstrap.js',
     ],
-    components: {global: true, dirs: ['~/components']},
+    components: { global: true, dirs: ['~/components'] },
+    compilerOptions: {
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["./src/*"],
+            "~/utils/*": ["./src/utils/*"]
+        }
+    },
     modules: [
         '@nuxtjs/i18n',
         '@pinia/nuxt',
@@ -38,10 +47,10 @@ export default defineNuxtConfig({
     ],
     piniaPersistedstate: {
         cookieOptions: {
-          sameSite: 'strict',
+            sameSite: 'strict',
         },
         storage: 'localStorage'
-      },
+    },
     i18n: {
         strategy: 'no_prefix',
         vueI18n: {
@@ -77,5 +86,5 @@ export default defineNuxtConfig({
     axios: {
         // extra config e.g
         apiBaseUrl: process.env.API_URL
-      }
+    }
 })

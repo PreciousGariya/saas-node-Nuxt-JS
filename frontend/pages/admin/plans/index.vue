@@ -7,7 +7,7 @@
     </NuxtLink>
   </div>
   <div class="row" v-if="plans">
-    <div class="col-12 col-md-3" v-for="plan in plans" :key="plan.id">
+    <div class="col-12 col-md-3" v-for="plan in plans.data" :key="plan.id">
       <div class="card">
         <img class="card-img-top" src="https://demo-basic.adminkit.io/img/photos/unsplash-1.jpg" alt="Unsplash">
         <div class="card-header" :id="plan.id">
@@ -28,26 +28,25 @@
 </template>
   
 <script setup>
+import { useAuthStore } from '~/store/auth';
+import { usePlans } from "~/composables/plans";
+
 definePageMeta({
-  layout: 'admin',
+  layout: 'user',
   middleware: 'auth'
 })
 
-const plans = ref(null)
+
+const status = computed(() => plan);
+
+const user = useAuthStore();
+
+const { plan, plans, getPlans, buyPlan } = usePlans();
+
 onMounted(async () => {
-  const token = await useCookie('token');
-  const header = {
-    'Content-Type': 'application/json',
-    'Authorization': token.value,
-  }
-  const { data, pending } = await useFetch(`/api/plans`, {
-    method: 'get',
-    headers: header,
-  });
-
-  plans.value = data._rawValue.data;
-
+  await getPlans()
 })
+
 
 /*const {
   data: users,

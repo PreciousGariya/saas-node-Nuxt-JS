@@ -6,7 +6,7 @@ const jwtGenerate = (user) => {
   console.log('user',user);
  try {
     const token = jwt.sign({ user_id: user.id, email: user.email }, jwtSecret, {
-      expiresIn: '1h',
+      expiresIn: '1d',
     });
     return token;
   } catch (error) {
@@ -53,6 +53,7 @@ const apiSuccess = (res, data, message) => {
     success: true,
     data: data,
     message: message,
+    statusCode: 200
   });
 };
 

@@ -3,7 +3,7 @@ import { useAuthStore } from '~/store/auth';
 import { checkTokenExpiry } from '~/utils/checkTokenExpiry'
 const { authenticated, emailVerified, auth } = storeToRefs(useAuthStore()); // make authenticated state reactive
 export default defineNuxtRouteMiddleware((to) => {
-
+    
     if (!checkTokenExpiry()) {
         if (to.fullPath == "/auth/verify-email") {
             return navigateTo("/auth/login")

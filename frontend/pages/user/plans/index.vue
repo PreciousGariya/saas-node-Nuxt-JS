@@ -5,8 +5,10 @@
       <Icon name="majesticons:plus" />
     </NuxtLink>
   </div>
-  <div class="row">
-    <div class="col-12 col-md-3" v-for="plan in plans" :key="plan.id">
+  <div v-if="plans" class="row">
+    <Alert v-if="status" :data="plan" />
+
+    <div class="col-12 col-md-3" v-for="plan in plans.data" :key="plan.id">
       <div class="card">
         <img class="card-img-top" src="https://demo-basic.adminkit.io/img/photos/unsplash-1.jpg" alt="Unsplash">
         <div class="card-header" :id="plan.id">
@@ -15,34 +17,50 @@
         <div class="card-body">
           <p class="card-text">{{ plan.description }}</p>
           <a href="#" class="card-link">{{ plan.price }}</a>
-          <a href="#" class="card-link">Buy</a>
+          <a href="#" class="card-link" @click.prevent="BuyPlan(plan.stripe_price_id, user.auth.stripeCustomerId)">Buy</a>
         </div>
       </div>
     </div>
   </div>
+  <div v-else>
+    <p>No Plans Available</p>
+  </div>
 </template>
   
-<script lang="ts" setup>
+<script setup>
+import { useAuthStore } from '~/store/auth';
+import { usePlans } from "~/composables/plans";
+
 definePageMeta({
   layout: 'user',
   middleware: 'auth'
 })
 
-const plans = ref(null)
+
+const status = computed(() => plan);
+
+const user = useAuthStore();
+
+const { plan, plans, getPlans, buyPlan } = usePlans();
+
 onMounted(async () => {
-  const token = await useCookie('token');
-  const header = {
-    'Content-Type': 'application/json',
-    'Authorization': token.value,
-  }
-  const { data, pending }: any = await useFetch(`/api/plans`, {
-    method: 'get',
-    headers: header,
-  });
-
-  plans.value = data._rawValue.data;
-
+  await getPlans()
 })
 
+
+const BuyPlan = async (pr_id, user_id) => {
+  plan.value = [];
+  await buyPlan(pr_id, user_id)
+
+  console.log('plan',plan.value)
+  handleRedirect(plan.value);
+
+}
+
+const handleRedirect = (plan) =>{
+  const url = plan.data.session.url;
+  console.log('url',url);
+  window.open(url, '_blank');
+}
 
 </script>

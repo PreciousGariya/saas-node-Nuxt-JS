@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import Swal from 'sweetalert2'
-import axios from '../plugins/axios'
-const $axios = axios().provide.axios;
+// import axios from '../plugins/axios'
+// const $axios = axios().provide.axios;
 
 interface UserPayloadInterface {
   email: string;

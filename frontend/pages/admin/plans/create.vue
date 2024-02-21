@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="d-flex justify-content-between mb-4">
-      <h1 class="h3 ">{{  $t('Plan Create') }} </h1>
-      <NuxtLink to="/admin/plans/" class="btn btn-primary">{{  $t('List') }}
+      <h1 class="h3 ">{{ $t('Plan Create') }} </h1>
+      <NuxtLink to="/admin/plans/" class="btn btn-primary">{{ $t('List') }}
         <Icon name="majesticons:plus" />
       </NuxtLink>
     </div>
@@ -12,9 +12,9 @@
         <div class="card">
           <form id="post-create-form" class="p-4" @submit.prevent="planCreate">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="form-group mb-2">
-                  <label id="name-label" for="name">{{  $t('title') }}</label>
+                  <label id="name-label" for="name">{{ $t('title') }}</label>
                   <input type="text" v-model="plan.title" @change="v$.title.$touch" name="title" id="name"
                     placeholder="Enter your plan title" class="form-control"
                     :class="{ 'border-danger': v$.title.$errors.length }" required>
@@ -22,9 +22,9 @@
                     error.$message }}</div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="form-group mb-2">
-                  <label id="price" for="price">{{  $t('price') }}</label>
+                  <label id="price" for="price">{{ $t('price') }}</label>
                   <input type="text" name="price" v-model="plan.price" @change="v$.price.$touch" id="price"
                     :class="{ 'border-danger': v$.price.$errors.length }" placeholder="Please Enter Price"
                     class="form-control" required>
@@ -32,12 +32,27 @@
                     error.$message }}</div>
                 </div>
               </div>
+              <div class="col-md-4">
+              <div class="form-group mb-2">
+                <label id="interval" for="interval">{{ $t('interval') }}</label>
+                <select name="interval" v-model="plan.interval" @change="v$.interval.$touch" id="interval"
+                  :class="{ 'border-danger': v$.interval.$errors.length }" placeholder="Please Enter interval"
+                  class="form-control" required>
+                  <option value="month">Monthly</option>
+                  <option value="year">Yearly</option>
+                  <option value="week">Weekly</option>
+                  <option value="day">Daily</option>
+                </select>
+                <div class="error-msg invalid-feedback d-block" v-for="error of v$.interval.$errors" :key="error.$uid">{{
+                  error.$message }}</div>
+              </div>
             </div>
-
+            </div>
+           
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group mb-2">
-                  <label>{{  $t('description') }}</label>
+                  <label>{{ $t('description') }}</label>
                   <textarea v-model="plan.description" id="comments" @change="v$.description.$touch" class="form-control"
                     name="comment" placeholder="Enter your comment here..."
                     :class="{ 'border-danger': v$.description.$errors.length }"></textarea>
@@ -49,7 +64,7 @@
 
             <div class="row">
               <div class="col-md-4">
-                <button type="submit" id="submit" class="btn btn-primary btn-block">{{  $t('Submit') }}</button>
+                <button type="submit" id="submit" class="btn btn-primary btn-block">{{ $t('Submit') }}</button>
               </div>
             </div>
           </form>
@@ -84,19 +99,24 @@ const rules = computed(() => {
       // minValue: maxLength(10),
       // maxValue: minLength(9999),
     },
+    interval :{
+      required: helpers.withMessage('The Interval field is required', required),
+    }
   };
 });
 const plan = ref({
   title: '',
   price: '',
-  description: ''
+  description: '',
+  interval:''
 })
 const v$ = useVuelidate(rules, plan);
 const resetValues = () => {
   plan.value = {
     title: '',
     price: '',
-    description: ''
+    description: '',
+    interval:''
   }
 }
 const planCreate = async () => {

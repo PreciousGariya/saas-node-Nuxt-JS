@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia';
 import Swal from 'sweetalert2'
-import axios from '../plugins/axios'
-const $axios = axios().provide.axios;
 
 interface UserPayloadInterface {
-  email: string;
-  password: string;
+  user_id: string;
+  price_id: string;
 }
 
 export const usePlanStore = defineStore('plan', {
@@ -14,39 +12,62 @@ export const usePlanStore = defineStore('plan', {
     plan: null,
   }),
   actions: {
-    async planData({ email, password }: UserPayloadInterface) {
+    async purchasePlan({ user_id, price_id }: UserPayloadInterface) {
       // useFetch from nuxt 3
       const apiUrl = process.env.API_URL;
 
-      const { data, pending }: any = await useFetch(`/api/login`, {
+      const { data, pending }: any = await $fetch(`/api/buy/plan`, {
         method: 'post',
-        headers: { 'Content-Type': 'application/json' },
         body: {
-          email,
-          password,
+          user_id, price_id 
         },
       });
       this.loading = pending;
-    //   const response = data._rawValue;
-    //   // console.log('response data', response);
-    //   if (!response.success) {
-    //     Swal.fire(
-    //       'ohhh oo!🤒 𐐘💥╾━╤デ╦︻ඞා',
-    //       response.errors,
-    //       'error',
-    //     );
-    //     return;
-    //   }
-    //   const token = useCookie('token'); // useCookie new hook in nuxt 3
-    //   token.value = response.data.token; // set token to cookie
-    //   this.authenticated = true; // set authenticated  state value to true
-    //   this.user= response.data.user;
-    //   Swal.fire(
-    //     'Great!✅',
-    //     'Logged in successfully😉',
-    //     'error',
-    //   );
+      const response = data._rawValue;
+      if (!response.success) {
+        Swal.fire(
+          'ohhh oo!🤒',
+          response.errors??response.message,
+          'error',
+        );
+        return;
+      }else{
+        Swal.fire(
+          'Great!✅',
+          'OTP sent successfully😉',
+          'success',
+        );
+      }
+      return response;
+    },
+
+    async getPlans() {
+      // useFetch from nuxt 3
+      const apiUrl = process.env.API_URL;
+
+      const { data, pending }: any = await $fetch(`/api/plans`, {
+        method: 'get',
+        headers: await this.tokenizedHeader(),
+      });
       
+      this.loading = pending;
+      const response = data._rawValue;
+      if (!response.success) {
+        Swal.fire(
+          'ohhh oo!🤒',
+          response.errors??response.message,
+          'error',
+        );
+        return;
+      }
+      return response;
+    },
+
+  async tokenizedHeader() {
+      return {
+        'Content-Type' : 'application/json',
+        'Authorization': useCookie('token').value,
+      };
     },
   
     persist: true

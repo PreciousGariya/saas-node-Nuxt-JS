@@ -215,8 +215,10 @@ export const useAuthStore = defineStore("auth", {
     },
     logUserOut() {
       const token = useCookie('token'); // useCookie new hook in nuxt 3
+      const ref= useCookie('refresh_token')
       this.authenticated = false; // set authenticated  state value to false
       token.value = null; // clear the token cookie
+      ref.value = null;
       this.auth.id = null;
       this.auth.firstName = null;
       this.auth.lastName = null;
@@ -228,7 +230,6 @@ export const useAuthStore = defineStore("auth", {
       this.auth.isActive = null;
       this.auth.created_at = null;
       return navigateTo('/auth/login');
-    },
-
-  },
+    }
+  }
 });
