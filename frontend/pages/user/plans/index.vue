@@ -15,12 +15,13 @@
           <h5 class="card-title mb-0">{{ plan.title }}</h5>
         </div>
         <div class="card-body">
+          <h4 class="text-primary">${{ plan.price }}</h4>
           <p class="card-text">{{ plan.description }}</p>
-          <a href="#" class="card-link">{{ plan.price }}</a>
-          <a href="#" class="card-link" @click.prevent="BuyPlan(plan.stripe_price_id, user.auth.stripeCustomerId)">Buy</a>
+          <button class="btn btn-success" @click.prevent="BuyPlan(plan.stripe_price_id, user.auth.stripeCustomerId)">Purchase Plan  <Icon name="mdi:contactless-payment" size="2rem"/></button>
         </div>
       </div>
     </div>
+    <Icon v-if="loading.value" color="red" size="3rem" name="eos-icons:bubble-loading" />
   </div>
   <div v-else>
     <p>No Plans Available</p>
@@ -36,7 +37,7 @@ definePageMeta({
   middleware: 'auth'
 })
 
-
+const loading = ref(false);
 const status = computed(() => plan);
 
 const user = useAuthStore();
@@ -49,9 +50,10 @@ onMounted(async () => {
 
 
 const BuyPlan = async (pr_id, user_id) => {
+  loading.value= true;
   plan.value = [];
-  await buyPlan(pr_id, user_id)
-
+  await buyPlan(pr_id, user_id);
+  loading.value= false;
   console.log('plan',plan.value)
   handleRedirect(plan.value);
 
